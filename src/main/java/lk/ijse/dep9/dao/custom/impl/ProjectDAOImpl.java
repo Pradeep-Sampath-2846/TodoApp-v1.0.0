@@ -112,4 +112,22 @@ public class ProjectDAOImpl implements ProjectDAO {
     public boolean existById(Integer id) {
         return findById(id).isPresent();
     }
+
+    @Override
+    public List<Project> findAllProjectsByUsername(String username) {
+        List<Project> projectList =new ArrayList<>();
+
+        try {
+            PreparedStatement stm = connection.prepareStatement("SELECT * FROM Project WHERE username=?");
+            stm.setString(1,username);
+            ResultSet rst = stm.executeQuery();
+            while (rst.next()){
+                projectList.add(new Project(rst.getInt("id"),rst.getString("name"),rst.getString("username")));
+
+            }
+            return projectList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
