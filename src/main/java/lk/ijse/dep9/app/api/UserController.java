@@ -34,13 +34,15 @@ public class UserController {
 
     }
 
-    @GetMapping("/me")
-    public void getUserAccountDetails(){
+    @GetMapping(value = "/me",produces = "application/json")
+    public UserDTO getUserAccountDetails(){
+        System.out.println("getUserAccount()");
+        return new UserDTO();
 
     }
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/me")
     public void deleteUserAccount(){
-
+        System.out.println("deleteUserAccount()");
     }
 }
