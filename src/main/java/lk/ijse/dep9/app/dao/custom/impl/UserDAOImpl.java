@@ -16,13 +16,9 @@ import java.util.Optional;
 @Component
 
 public class UserDAOImpl implements UserDAO {
-
-    private final Connection connection;
-
     private JdbcTemplate jdbc;
 
     public UserDAOImpl(Connection connection,JdbcTemplate jdbc) {
-        this.connection = connection;
         this.jdbc=jdbc;
     }
 
@@ -59,14 +55,13 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findAll() {
 
-        return jdbc.query("SELECT * FROM User",rst->{
-            List<User> userList= new ArrayList<>();
-            while (rst.next()){
-                userList.add(new User
-                        (rst.getString("username"),rst.getString("password"),rst.getString("full_name")));
-            }
-            return userList;
-        });
+        return jdbc.query("SELECT * FROM User",(rst,rowNum)->
+                new User
+                        (rst.getString("username"),
+                                rst.getString("password"),
+                                rst.getString("full_name")));
+
+
 
     }
 
