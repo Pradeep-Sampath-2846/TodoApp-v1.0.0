@@ -1,9 +1,8 @@
-package lk.ijse.dep9.dao.custom.impl;
+package lk.ijse.dep9.app.dao.custom.impl;
 
-import lk.ijse.dep9.dao.custom.ProjectDAO;
-import lk.ijse.dep9.dao.util.ConnectionUtil;
-import lk.ijse.dep9.entity.Project;
-import org.springframework.context.annotation.Scope;
+import lk.ijse.dep9.app.dao.custom.ProjectDAO;
+import lk.ijse.dep9.app.dao.util.ConnectionUtil;
+import lk.ijse.dep9.app.entity.Project;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Component
-
 public class ProjectDAOImpl implements ProjectDAO {
 
     private final Connection connection;

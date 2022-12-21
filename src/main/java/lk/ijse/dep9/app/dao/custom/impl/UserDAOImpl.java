@@ -1,10 +1,7 @@
-package lk.ijse.dep9.dao.custom.impl;
+package lk.ijse.dep9.app.dao.custom.impl;
 
-import lk.ijse.dep9.dao.custom.UserDAO;
-import lk.ijse.dep9.dao.util.ConnectionUtil;
-import lk.ijse.dep9.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
+import lk.ijse.dep9.app.dao.custom.UserDAO;
+import lk.ijse.dep9.app.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -16,9 +13,12 @@ import java.util.List;
 import java.util.Optional;
 @Component
 public class UserDAOImpl implements UserDAO {
-    @Autowired
+
     private Connection connection;
 
+    public UserDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public User save(User user) {

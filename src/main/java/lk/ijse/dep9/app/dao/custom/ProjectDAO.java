@@ -1,7 +1,7 @@
-package lk.ijse.dep9.dao.custom;
+package lk.ijse.dep9.app.dao.custom;
 
-import lk.ijse.dep9.dao.CrudDAO;
-import lk.ijse.dep9.entity.Project;
+import lk.ijse.dep9.app.dao.CrudDAO;
+import lk.ijse.dep9.app.entity.Project;
 
 import java.util.List;
 

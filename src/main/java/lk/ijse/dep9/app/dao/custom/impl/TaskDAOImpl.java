@@ -1,10 +1,8 @@
-package lk.ijse.dep9.dao.custom.impl;
+package lk.ijse.dep9.app.dao.custom.impl;
 
-import lk.ijse.dep9.dao.custom.TaskDAO;
-import lk.ijse.dep9.dao.util.ConnectionUtil;
-import lk.ijse.dep9.entity.Task;
+import lk.ijse.dep9.app.dao.custom.TaskDAO;
+import lk.ijse.dep9.app.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
