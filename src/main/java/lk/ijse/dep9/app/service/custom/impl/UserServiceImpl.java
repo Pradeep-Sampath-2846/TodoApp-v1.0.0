@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void verifyUser(String username, String password) {
-        User user = userDAO.findById(username).orElseThrow(AccessDeniedException::new);
+    public UserDTO verifyUser(String username, String password) {
+        UserDTO user = userDAO.findById(username).map(transformer::toUserDTO).orElseThrow(AccessDeniedException::new);
 
         if (DigestUtils.sha256Hex(password).equals(user.getPassword())){
-
+            return user;
         }
         throw new AccessDeniedException();
     }
