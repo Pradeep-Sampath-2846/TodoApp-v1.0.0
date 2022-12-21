@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Component
+
 public class UserDAOImpl implements UserDAO {
 
     private Connection connection;
