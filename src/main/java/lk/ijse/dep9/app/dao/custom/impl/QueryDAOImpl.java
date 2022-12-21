@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 @Component
-
 public class QueryDAOImpl implements QueryDAO {
 
     private JdbcTemplate jdbc;
