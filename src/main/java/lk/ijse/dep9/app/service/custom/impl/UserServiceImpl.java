@@ -2,9 +2,11 @@ package lk.ijse.dep9.app.service.custom.impl;
 
 import lk.ijse.dep9.app.dto.UserDTO;
 import lk.ijse.dep9.app.entity.User;
+import lk.ijse.dep9.app.exceptions.AccessDeniedException;
 import lk.ijse.dep9.app.service.custom.UserService;
 import lk.ijse.dep9.app.util.Transformer;
 import lk.ijse.dep9.app.dao.custom.UserDAO;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +25,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createNewUserAccount(UserDTO userDTO) {
+        userDTO.setPassword(DigestUtils.sha256Hex(userDTO.getPassword()));
         userDAO.save(transformer.toUser(userDTO));
-//        if (true) throw new RuntimeException();
-        userDAO.save(new User("testing","testing","testing"));
+
+    }
+
+    @Override
+    public void verifyUser(String username, String password) {
+        User user = userDAO.findById(username).orElseThrow(AccessDeniedException::new);
+
+        if (DigestUtils.sha256Hex(password).equals(user.getPassword())){
+
+        }
+        throw new AccessDeniedException();
     }
 
 }
