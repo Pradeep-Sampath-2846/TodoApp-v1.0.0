@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Component
-@Scope("request")
+
 public class ProjectDAOImpl implements ProjectDAO {
 
     private final Connection connection;
