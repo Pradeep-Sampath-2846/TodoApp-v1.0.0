@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = "application/json")
+    @PostMapping()
     public void createUserAccount(@Validated(ValidationGroups.Create.class) @RequestBody UserDTO user/*, Errors errors*/){
         userService.createNewUserAccount(user);
 

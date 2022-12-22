@@ -1,8 +1,7 @@
 package lk.ijse.dep9.app.service.custom.impl;
 
 import lk.ijse.dep9.app.dto.UserDTO;
-import lk.ijse.dep9.app.entity.User;
-import lk.ijse.dep9.app.exceptions.AccessDeniedException;
+import lk.ijse.dep9.app.exceptions.AuthenticationException;
 import lk.ijse.dep9.app.service.custom.UserService;
 import lk.ijse.dep9.app.util.Transformer;
 import lk.ijse.dep9.app.dao.custom.UserDAO;
@@ -32,12 +31,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO verifyUser(String username, String password) {
-        UserDTO user = userDAO.findById(username).map(transformer::toUserDTO).orElseThrow(AccessDeniedException::new);
+        UserDTO user = userDAO.findById(username).map(transformer::toUserDTO).orElseThrow(AuthenticationException::new);
 
         if (DigestUtils.sha256Hex(password).equals(user.getPassword())){
             return user;
         }
-        throw new AccessDeniedException();
+        throw new AuthenticationException();
     }
 
 }

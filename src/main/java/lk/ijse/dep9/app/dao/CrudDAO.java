@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface CrudDAO<T extends SuperEntity,ID extends Serializable> extends SuperDAO{
+public interface CrudDAO<T extends SuperEntity, ID extends Serializable> extends SuperDAO {
 
     T save(T t);
 
@@ -21,5 +21,4 @@ public interface CrudDAO<T extends SuperEntity,ID extends Serializable> extends 
     long count();
 
     boolean existById(ID pk);
-
 }

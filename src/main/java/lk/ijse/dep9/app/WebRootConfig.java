@@ -2,6 +2,7 @@ package lk.ijse.dep9.app;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Configuration
+@ComponentScan
 @EnableTransactionManagement  // use to enable transaction management
 public class WebRootConfig {
     @Bean
@@ -27,11 +29,11 @@ public class WebRootConfig {
         jndi.setExpectedType(DataSource.class);
         return jndi;
     }
-    @Bean
-    @RequestScope
-    public Connection connection(DataSource dataSource) throws SQLException {
-        return DataSourceUtils.getConnection(dataSource);
-    }
+//    @Bean
+//    @RequestScope
+//    public Connection connection(DataSource dataSource) throws SQLException {
+//        return DataSourceUtils.getConnection(dataSource);
+//    }
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource){
         return new JdbcTemplate(dataSource);
