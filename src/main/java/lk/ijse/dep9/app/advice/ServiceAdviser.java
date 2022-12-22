@@ -7,6 +7,7 @@ import lk.ijse.dep9.app.exceptions.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +22,23 @@ public class ServiceAdviser {
         this.projectDAO = projectDAO;
     }
 
-    @Before(value = "execution(public * lk.ijse.dep9.app.service.custom.ProjectTaskService.*(..)) && args(username,projectId)", argNames = "username,projectId")
-    public void serviceMethodAuthorization(String username,int projectId){
-//        log.debug("Before the service method ,username:{} ,projectId: {}",username,projectId);
-        Project project = projectDAO.findById(projectId).orElseThrow(()-> new EmptyResultDataAccessException(1));
+    @Pointcut("execution(public * lk.ijse.dep9.app.service.custom.ProjectTaskService.*(..))")
+    public void serviceMethodAuthorization(){}
 
-        if (! project.getUsername().matches(username)) throw new AccessDeniedException();
+    @Before(value = "serviceMethodAuthorization() && args(username,projectId)", argNames = "username,projectId")
+    public void serviceMethodAuthorization(String username, int projectId){
+        executeAdvise(username,projectId);
     }
+
+    @Before(value = "serviceMethodAuthorization() && args(project)", argNames = "project")
+    public void serviceMethodAuthorization(ProjectDTO project){
+        if (project.getId() != null) executeAdvise(project.getUsername(),project.getId());
+    }
+
+    private void executeAdvise(String username, int projectId){
+        Project project = projectDAO.findById(projectId).orElseThrow(() -> new EmptyResultDataAccessException(1));
+        if(!project.getUsername().matches(username)) throw new AccessDeniedException();
+    }
+
+
 }

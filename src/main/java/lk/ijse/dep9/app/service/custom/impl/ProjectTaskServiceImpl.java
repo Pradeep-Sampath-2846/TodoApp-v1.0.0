@@ -49,9 +49,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
     @Override
     public void renameProject(ProjectDTO projectDTO) {
-        Project projectEntity = projectDAO.findById(projectDTO.getId()).orElseThrow(()-> new EmptyResultDataAccessException(1));
-
-        if(!projectEntity.getUsername().matches(projectDTO.getUsername())) throw new AccessDeniedException();
+//        Project projectEntity = projectDAO.findById(projectDTO.getId()).orElseThrow(()-> new EmptyResultDataAccessException(1));
+//
+//        if(!projectEntity.getUsername().matches(projectDTO.getUsername())) throw new AccessDeniedException();
 
         projectDAO.update(transformer.toProject(projectDTO));
 
