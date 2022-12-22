@@ -8,10 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @JsonIgnoreProperties(value = "password",allowSetters = true)
@@ -20,6 +17,7 @@ public class UserDTO implements Serializable {
     @NotBlank(message = "full name cannot be empty or null")
     @Pattern(regexp = "^[A-Za-z ]+$",message = "Invalid name")
     private String fullName;
+    @Null(groups = ValidationGroups.Update.class,message = "Username can't be updated")
     @NotBlank(message = "Username can't be empty or null",groups = ValidationGroups.Create.class)
     private String username;
     @NotEmpty(message = "password cannot be empty or null")
