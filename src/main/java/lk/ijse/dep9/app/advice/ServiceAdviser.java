@@ -1,11 +1,10 @@
 package lk.ijse.dep9.app.advice;
 
-import lk.ijse.dep9.app.dao.custom.ProjectDAO;
-import lk.ijse.dep9.app.dao.custom.TaskDAO;
+import lk.ijse.dep9.app.repository.ProjectRepository;
+import lk.ijse.dep9.app.repository.TaskRepository;
 import lk.ijse.dep9.app.dto.ProjectDTO;
 import lk.ijse.dep9.app.dto.TaskDTO;
 import lk.ijse.dep9.app.entity.Project;
-import lk.ijse.dep9.app.entity.Task;
 import lk.ijse.dep9.app.exceptions.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,12 +20,12 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class ServiceAdviser {
 
-    private final ProjectDAO projectDAO;
-    private final TaskDAO taskDAO;
+    private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
 
-    public ServiceAdviser(ProjectDAO projectDAO, TaskDAO taskDAO) {
-        this.projectDAO = projectDAO;
-        this.taskDAO = taskDAO;
+    public ServiceAdviser(ProjectRepository projectRepository, TaskRepository taskRepository) {
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Pointcut("execution(public * lk.ijse.dep9.app.service.custom.ProjectTaskService.*(..))")
@@ -48,8 +47,8 @@ public class ServiceAdviser {
     public void serviceMethodAuthorization(String username, TaskDTO task) {
         executeAdvice(username, task.getProjectId());
         if (task.getId() != null) {
-            taskDAO.findById(task.getId()).orElseThrow(() -> new EmptyResultDataAccessException(1));
-            if (taskDAO.findAllTaskByProjectId(task.getProjectId())
+            taskRepository.findById(task.getId()).orElseThrow(() -> new EmptyResultDataAccessException(1));
+            if (taskRepository.findAllTaskByProjectId(task.getProjectId())
                     .stream().noneMatch(t -> t.getId() == task.getId())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
@@ -57,9 +56,9 @@ public class ServiceAdviser {
     }
 
     private void executeAdvice(String username, int projectId) {
-        Project project = projectDAO.findById(projectId).orElseThrow(
+        Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new EmptyResultDataAccessException(1));
-        if (!project.getUsername().matches(username)) throw new AccessDeniedException();
+        if (!project.getUser().getUsername().matches(username)) throw new AccessDeniedException();
     }
 
 

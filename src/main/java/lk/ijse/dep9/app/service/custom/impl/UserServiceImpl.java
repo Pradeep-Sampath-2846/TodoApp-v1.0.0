@@ -1,14 +1,14 @@
 package lk.ijse.dep9.app.service.custom.impl;
 
-import lk.ijse.dep9.app.dao.custom.ProjectDAO;
-import lk.ijse.dep9.app.dao.custom.TaskDAO;
+import lk.ijse.dep9.app.repository.ProjectRepository;
+import lk.ijse.dep9.app.repository.TaskRepository;
 import lk.ijse.dep9.app.dto.UserDTO;
 import lk.ijse.dep9.app.entity.Project;
 import lk.ijse.dep9.app.entity.Task;
 import lk.ijse.dep9.app.exceptions.AuthenticationException;
 import lk.ijse.dep9.app.service.custom.UserService;
 import lk.ijse.dep9.app.util.Transformer;
-import lk.ijse.dep9.app.dao.custom.UserDAO;
+import lk.ijse.dep9.app.repository.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,29 +23,29 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
-    private final ProjectDAO projectDAO;
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
-    private final TaskDAO taskDAO;
+    private final TaskRepository taskRepository;
     private final Transformer transformer;
 
-    public UserServiceImpl(UserDAO userDAO, ProjectDAO projectDAO, TaskDAO taskDAO, Transformer transformer) {
-        this.userDAO = userDAO;
-        this.projectDAO = projectDAO;
-        this.taskDAO = taskDAO;
+    public UserServiceImpl(UserRepository userRepository, ProjectRepository projectRepository, TaskRepository taskRepository, Transformer transformer) {
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
         this.transformer = transformer;
     }
 
     @Override
     public void createNewUserAccount(UserDTO userDTO) {
         userDTO.setPassword(DigestUtils.sha256Hex(userDTO.getPassword()));
-        userDAO.save(transformer.toUser(userDTO));
+        userRepository.save(transformer.toUser(userDTO));
 
     }
 
     @Override
     public UserDTO verifyUser(String username, String password) {
-        UserDTO user = userDAO.findById(username).map(transformer::toUserDTO).orElseThrow(AuthenticationException::new);
+        UserDTO user = userRepository.findById(username).map(transformer::toUserDTO).orElseThrow(AuthenticationException::new);
 
         if (DigestUtils.sha256Hex(password).equals(user.getPassword())){
             return user;
@@ -55,30 +55,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserAccountDetails(String username) {
-       return userDAO.findById(username).map(transformer::toUserDTO).get();
+       return userRepository.findById(username).map(transformer::toUserDTO).get();
     }
 
     @Override
     public void updateUserAccountDetails(UserDTO userDTO) {
         userDTO.setPassword(DigestUtils.sha256Hex(userDTO.getPassword()));
-        userDAO.update(transformer.toUser(userDTO));
+        userRepository.save(transformer.toUser(userDTO));
     }
 
     @Override
     public void deleteUserAccount(String username) {
-        List<Project> projectList = projectDAO.findAllProjectsByUsername(username);
+        List<Project> projectList = projectRepository.findAllProjectsByUsername(username);
         for (Project project : projectList) {
-            List<Task> taskList = taskDAO.findAllTaskByProjectId(project.getId());
-            taskList.forEach(task -> taskDAO.deleteById(task.getId()));
-            projectDAO.deleteById(project.getId());
+            List<Task> taskList = taskRepository.findAllTaskByProjectId(project.getId());
+            taskList.forEach(task -> taskRepository.deleteById(task.getId()));
+            projectRepository.deleteById(project.getId());
         }
-        userDAO.deleteById(username);
+        userRepository.deleteById(username);
 
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDTO user = userDAO.findById(username).map(transformer::toUserDTO).
+        UserDTO user = userRepository.findById(username).map(transformer::toUserDTO).
                 orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
 
         return new User(user.getUsername(),user.getPassword(),new ArrayList<>());
