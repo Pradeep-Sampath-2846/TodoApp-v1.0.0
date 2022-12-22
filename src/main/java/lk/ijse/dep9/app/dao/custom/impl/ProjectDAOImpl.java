@@ -28,7 +28,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     public Project save(Project project) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(con -> {
-            PreparedStatement stm = con.prepareStatement("INSERT INTO Project (name, username) VALUES (?, ?)");
+            PreparedStatement stm = con.prepareStatement("INSERT INTO Project (name, username) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, project.getName());
             stm.setString(2, project.getUsername());
             return stm;
@@ -39,7 +39,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     @Override
     public void update(Project project) {
-        jdbc.update("UPDATE Project SET name=? AND username =? WHERE id=?", project.getName(), project.getUsername(), project.getId());
+        jdbc.update("UPDATE Project SET name=? ,username =? WHERE id=?", project.getName(), project.getUsername(), project.getId());
     }
 
     @Override
