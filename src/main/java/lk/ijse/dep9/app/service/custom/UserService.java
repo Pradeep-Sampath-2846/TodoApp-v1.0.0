@@ -11,4 +11,5 @@ public interface UserService extends SuperService {
     UserDTO getUserAccountDetails(String username);
 
     void updateUserAccountDetails(UserDTO userDTO);
+    void deleteUserAccount(String username);
 }
