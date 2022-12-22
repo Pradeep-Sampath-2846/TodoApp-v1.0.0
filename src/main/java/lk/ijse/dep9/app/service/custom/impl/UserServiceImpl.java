@@ -9,6 +9,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -37,6 +39,17 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         throw new AuthenticationException();
+    }
+
+    @Override
+    public UserDTO getUserAccountDetails(String username) {
+       return userDAO.findById(username).map(transformer::toUserDTO).get();
+    }
+
+    @Override
+    public void updateUserAccountDetails(UserDTO userDTO) {
+        userDTO.setPassword(DigestUtils.sha256Hex(userDTO.getPassword()));
+        userDAO.update(transformer.toUser(userDTO));
     }
 
 }
