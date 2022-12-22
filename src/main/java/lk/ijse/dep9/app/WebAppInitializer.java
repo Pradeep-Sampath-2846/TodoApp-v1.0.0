@@ -30,9 +30,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Filter[] getServletFilters() {
-        DelegatingFilterProxy filterProxy = new DelegatingFilterProxy();
-        filterProxy.setTargetBeanName("securityFilter");
+        DelegatingFilterProxy filterProxy = new DelegatingFilterProxy("securityFilter");  //can register filter which is  managed by spring
         return new Filter[]{filterProxy};
     }
 
 }
+
+//DelegatingFilterProxy

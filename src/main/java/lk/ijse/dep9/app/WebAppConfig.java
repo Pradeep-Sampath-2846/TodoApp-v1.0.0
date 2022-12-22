@@ -9,9 +9,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
+@ComponentScan
 public class WebAppConfig {
-//    @Bean
-//    public DelegatingFilterProxy delegatingFilterProxy(SecurityFilter securityFilter){
-//        return new DelegatingFilterProxy(securityFilter);
-//    }
+
 }
