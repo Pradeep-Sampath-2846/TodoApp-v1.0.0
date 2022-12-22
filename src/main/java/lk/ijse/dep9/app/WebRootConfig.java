@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jndi.JndiObjectFactoryBean;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 @ComponentScan
 @EnableTransactionManagement  // use to enable transaction management
 @EnableAspectJAutoProxy  //use to enable aspectJ
+@EnableWebSecurity
 public class WebRootConfig {
     @Bean
     public JndiObjectFactoryBean dataSource(){

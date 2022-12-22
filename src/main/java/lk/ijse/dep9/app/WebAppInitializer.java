@@ -1,6 +1,5 @@
 package lk.ijse.dep9.app;
 
-import lk.ijse.dep9.app.api.filter.SecurityFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -28,11 +27,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         return new String[]{"/"};
     }
 
-    @Override
-    protected Filter[] getServletFilters() {
-        DelegatingFilterProxy filterProxy = new DelegatingFilterProxy("securityFilter");  //can register filter which is  managed by spring
-        return new Filter[]{filterProxy};
-    }
 
 }
 
