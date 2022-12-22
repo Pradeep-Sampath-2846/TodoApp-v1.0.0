@@ -30,39 +30,37 @@ public class ServiceAdviser {
     }
 
     @Pointcut("execution(public * lk.ijse.dep9.app.service.custom.ProjectTaskService.*(..))")
-    public void serviceMethodAuthorization(){}
+    public void serviceMethodAuthorization() {
+    }
 
-    @Before(value = "serviceMethodAuthorization() && args(username,projectId)", argNames = "username,projectId")
-    public void serviceMethodAuthorization(String username, int projectId){
-        executeAdvise(username,projectId);
+    @Before(value = "serviceMethodAuthorization() && args(username,projectId)",
+            argNames = "username,projectId")
+    public void serviceMethodAuthorization(String username, int projectId) {
+        executeAdvice(username, projectId);
     }
 
     @Before(value = "serviceMethodAuthorization() && args(project)", argNames = "project")
-    public void serviceMethodAuthorization(ProjectDTO project){
-        if (project.getId() != null) executeAdvise(project.getUsername(),project.getId());
+    public void serviceMethodAuthorization(ProjectDTO project) {
+        if (project.getId() != null) executeAdvice(project.getUsername(), project.getId());
     }
 
-    @Before(value = "serviceMethodAuthorization() && args(username,task,..)", argNames = "username,task")
-    public void serviceMethodAuthorization(String username, TaskDTO task){
-        executeAdvise(username,task.getProjectId());
-        if (task.getId()!=null){
-            Task taskEntity = taskDAO.findById(task.getId()).orElseThrow(() -> new EmptyResultDataAccessException(1));
-            if (!taskDAO.findAllTaskByProjectId(taskEntity.getProjectId()).stream()
-                    .noneMatch(t -> t.getId()==task.getId())){
-
+    @Before(value = "serviceMethodAuthorization() && args(username, task, ..)", argNames = "username,task")
+    public void serviceMethodAuthorization(String username, TaskDTO task) {
+        executeAdvice(username, task.getProjectId());
+        if (task.getId() != null) {
+            taskDAO.findById(task.getId()).orElseThrow(() -> new EmptyResultDataAccessException(1));
+            if (taskDAO.findAllTaskByProjectId(task.getProjectId())
+                    .stream().noneMatch(t -> t.getId() == task.getId())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-
             }
-
         }
     }
 
-
-    private void executeAdvise(String username, int projectId){
-        Project project = projectDAO.findById(projectId).orElseThrow(() -> new EmptyResultDataAccessException(1));
-        if(!project.getUsername().matches(username)) throw new AccessDeniedException();
+    private void executeAdvice(String username, int projectId) {
+        Project project = projectDAO.findById(projectId).orElseThrow(
+                () -> new EmptyResultDataAccessException(1));
+        if (!project.getUsername().matches(username)) throw new AccessDeniedException();
     }
-
 
 
 

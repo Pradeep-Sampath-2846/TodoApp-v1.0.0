@@ -93,8 +93,8 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
     @Override
     public void updateTaskStatus(String username, TaskDTO taskDTO, boolean completed) {
-        Task task = transformer.toTask(taskDTO);
-        task.setStatus(completed?Task.Status.COMPLETED:Task.Status.NOT_COMPLETED);
+        Task task = taskDAO.findById(taskDTO.getId()).get();
+        task.setStatus(completed? Task.Status.COMPLETED : Task.Status.NOT_COMPLETED);
         taskDAO.update(task);
     }
 }
