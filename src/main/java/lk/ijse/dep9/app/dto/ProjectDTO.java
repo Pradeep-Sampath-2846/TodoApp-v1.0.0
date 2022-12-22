@@ -19,5 +19,7 @@ public class ProjectDTO {
     @NotBlank(message = "project name can't be null or empty")
     @Length(min = 3,message = "project name should be at least three characters")
     private String name;
+
+    private String username;
 }
 
